@@ -24,7 +24,16 @@ import java.util.Arrays;
 public final class Password implements Serializable {
 
     @Column(name = "password")
-    private char[] value;
+    private String hash;
+
+    @Column(name = "salt")
+    private String salt;
+
+    public Password(String hash, String salt)
+    {
+        this.hash = hash;
+        this.salt = salt;
+    }
 
     public static Password of(char[] password, char[] passwordConfirm) {
         if (!Arrays.equals(password, passwordConfirm))
@@ -32,7 +41,10 @@ public final class Password implements Serializable {
 
         validate(password);
 
-        return new Password(hashPass(password));
+        Hash hash = hashPass(password);
+
+        // Save both hash and salt
+        return new Password(hash.getResult(), hash.getSalt());
     }
 
     private static void validate(char[] password) {
@@ -59,10 +71,16 @@ public final class Password implements Serializable {
         return uppercaseCounter > 0 && lowercaseCounter > 0;
     }
 
-    private static char[] hashPass(char[] password) {
+    private static Hash hashPass(char[] password) {
+        // Secure the password
         SecureString securedPassword = new SecureString(password);
-        Hash hash = com.password4j.Password.hash(securedPassword).addSalt("4jvd8343j4f23mc").withPBKDF2();
 
-        return hash.getResult().toCharArray();
+        // Hash the user password with a randomly generated salt
+        Hash hash = com.password4j.Password.hash(securedPassword).addRandomSalt().withPBKDF2();
+
+        // Clear the password from memory
+        securedPassword.clear();
+
+        return hash;
     }
 }
