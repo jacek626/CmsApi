@@ -6,6 +6,7 @@ import com.app.cms.entity.Category;
 import com.app.cms.entity.User;
 import com.app.cms.error.type.ObjectHaveReferencedObjects;
 import com.app.cms.repository.UserRepository;
+import com.app.cms.utils.PasswordTestUtils;
 import com.app.cms.valueobject.article.Content;
 import com.app.cms.valueobject.article.Rating;
 import com.app.cms.valueobject.article.Title;
@@ -52,8 +53,9 @@ public class UserServiceIntegrationTest {
 
         //then
         assertThat(userRepository.getOne(-1L)).isNotNull();
-        assertThat(userRepository.getOne(-1L).getPassword()).isEqualTo(Password.of("Password657".toCharArray(), "Password657".toCharArray()));
-        assertThat(userRepository.getOne(-1L).getPassword()).isNotEqualTo(Password.of("Password22".toCharArray(), "Password22".toCharArray()));
+        var savedPassword = userRepository.getOne(-1L).getPassword();
+        assertThat(PasswordTestUtils.checkPasswordsAreEquals("Password657", savedPassword)).isTrue();
+        assertThat(PasswordTestUtils.checkPasswordsAreEquals("Password22", savedPassword)).isFalse();
     }
 
     @Test
@@ -103,9 +105,12 @@ public class UserServiceIntegrationTest {
 
         //then
         assertThat(userRepository.existsByLogin(user.getLogin())).isTrue();
-        assertThat(userRepository.getOne(user.getId()).getPassword()).isEqualTo(password);
-        assertThat(userRepository.getOne(user.getId()).getEmail()).isEqualTo(email);
-        assertThat(userRepository.getOne(user.getId()).getLogin()).isEqualTo(login);
+        var savedUser = userRepository.getOne(user.getId());
+
+        assertThat(PasswordTestUtils.checkPasswordsAreEquals("Password582048", savedUser.getPassword())).isTrue();
+        assertThat(PasswordTestUtils.checkPasswordsAreEquals("Password222228", savedUser.getPassword())).isFalse();
+        assertThat(savedUser.getEmail()).isEqualTo(email);
+        assertThat(savedUser.getLogin()).isEqualTo(login);
     }
 
     @Test
@@ -139,8 +144,6 @@ public class UserServiceIntegrationTest {
         userService.save(user);
         articleService.save(article);
 
-        assertThatThrownBy(() -> {
-            userService.delete(user.getId());
-        }).isInstanceOf(ObjectHaveReferencedObjects.class);
+        assertThatThrownBy(() -> userService.delete(user.getId())).isInstanceOf(ObjectHaveReferencedObjects.class);
     }
 }

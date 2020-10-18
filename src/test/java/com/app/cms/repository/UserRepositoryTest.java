@@ -1,7 +1,7 @@
 package com.app.cms.repository;
 
+import com.app.cms.utils.PasswordTestUtils;
 import com.app.cms.valueobject.user.Email;
-import com.app.cms.valueobject.user.Password;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +45,10 @@ public class UserRepositoryTest {
         userRepository.updatePartially(-1L, userValues);
 
         //then
-        then(userRepository.getOne(-1L).getEmail()).isEqualTo(Email.of("email3434@email.com"));
-        then(userRepository.getOne(-1L).getPassword()).isEqualTo(Password.of("Password4699304".toCharArray(), "Password4699304".toCharArray()));
+        var savedUser = userRepository.getOne(-1L);
+        then(PasswordTestUtils.checkPasswordsAreEquals("Password4699304", savedUser.getPassword())).isTrue();
+        then(PasswordTestUtils.checkPasswordsAreEquals("Password7777304", savedUser.getPassword())).isFalse();
+        then(savedUser.getEmail()).isEqualTo(Email.of("email3434@email.com"));
     }
 
 

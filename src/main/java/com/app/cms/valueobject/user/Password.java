@@ -24,16 +24,10 @@ import java.util.Arrays;
 public final class Password implements Serializable {
 
     @Column(name = "password")
-    private String hash;
+    private String value;
 
     @Column(name = "salt")
     private String salt;
-
-    public Password(String hash, String salt)
-    {
-        this.hash = hash;
-        this.salt = salt;
-    }
 
     public static Password of(char[] password, char[] passwordConfirm) {
         if (!Arrays.equals(password, passwordConfirm))
@@ -61,10 +55,10 @@ public final class Password implements Serializable {
         int uppercaseCounter = 0;
         int lowercaseCounter = 0;
 
-        for (int i = 0; i < password.length; i++) {
-            if (Character.isUpperCase(password[i]))
+        for (char c : password) {
+            if (Character.isUpperCase(c))
                 uppercaseCounter++;
-            if (Character.isLowerCase(password[i]))
+            if (Character.isLowerCase(c))
                 lowercaseCounter++;
         }
 
@@ -83,4 +77,5 @@ public final class Password implements Serializable {
 
         return hash;
     }
+
 }

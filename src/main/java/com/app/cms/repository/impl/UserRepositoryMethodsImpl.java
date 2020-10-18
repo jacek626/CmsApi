@@ -34,6 +34,7 @@ public class UserRepositoryMethodsImpl implements UserRepositoryMethods {
 
             var password = Password.of(passwordValue.toCharArray(), passwordConfirm.toCharArray());
             changedValues.put("password", password.getValue());
+            changedValues.put("salt", password.getSalt());
             changedValues.remove("passwordConfirm");
         }
     }
