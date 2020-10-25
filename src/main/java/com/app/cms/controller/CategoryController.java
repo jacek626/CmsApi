@@ -67,9 +67,9 @@ public class CategoryController {
     }
 
     @GetMapping(value = "/{categoryId}/articles")
-    public Page<ArticleDto> getUserArticles(@PathVariable Long categoryId, @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                            @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
-                                            Sort sort) {
+    public Page<ArticleDto> getCategoryArticles(@PathVariable Long categoryId, @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                                Sort sort) {
         Pageable pageable = PageRequest.of(page, size, sort);
         return articleService.get(new ArticleWithCategory(categoryId), pageable).map(articleConverter::toDto);
     }

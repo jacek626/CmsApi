@@ -23,7 +23,7 @@ public class ArticleDto extends RepresentationModel<ArticleDto> implements Seria
     private String content;
 
     private LocalDate creationDate;
-
+    // todo delete userId? and categoryId?
     private Long userId;
 
     private Long categoryId;
