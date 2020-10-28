@@ -1,4 +1,4 @@
-package com.app.cms.controller;
+package com.app.cms.api;
 
 import com.app.cms.dto.ArticleDto;
 import com.app.cms.dto.UserDto;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class UserApi {
 
     private final UserRepository userRepository;
     private final UserService userService;
@@ -33,7 +33,7 @@ public class UserController {
     private final ArticleService articleService;
     private final ArticleConverter articleConverter;
 
-    public UserController(UserRepository userRepository, UserService userService, UserConverter userConverter, ArticleService articleService, ArticleConverter articleConverter) {
+    public UserApi(UserRepository userRepository, UserService userService, UserConverter userConverter, ArticleService articleService, ArticleConverter articleConverter) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.userConverter = userConverter;

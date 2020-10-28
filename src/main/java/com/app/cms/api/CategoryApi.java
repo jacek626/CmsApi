@@ -1,4 +1,4 @@
-package com.app.cms.controller;
+package com.app.cms.api;
 
 import com.app.cms.dto.ArticleDto;
 import com.app.cms.dto.CategoryDto;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/categories")
-public class CategoryController {
+public class CategoryApi {
 
     private final CategoryRepository categoryRepository;
     private final CategoryConverter categoryConverter;
@@ -30,7 +30,7 @@ public class CategoryController {
     private final ArticleService articleService;
     private final ArticleConverter articleConverter;
 
-    public CategoryController(CategoryRepository categoryRepository, CategoryConverter categoryConverter, CategoryService categoryService, ArticleService articleService, ArticleConverter articleConverter) {
+    public CategoryApi(CategoryRepository categoryRepository, CategoryConverter categoryConverter, CategoryService categoryService, ArticleService articleService, ArticleConverter articleConverter) {
         this.categoryRepository = categoryRepository;
         this.categoryConverter = categoryConverter;
         this.categoryService = categoryService;

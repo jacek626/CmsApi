@@ -1,4 +1,4 @@
-package com.app.cms.controller;
+package com.app.cms.api;
 
 import com.app.cms.dto.ArticleDto;
 import com.app.cms.dto.CommentDto;
@@ -30,7 +30,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/articles")
-public class ArticleController {
+public class ArticleApi {
 
     private final ArticleService articleService;
     private final ArticleRepository articleRepository;
@@ -38,7 +38,7 @@ public class ArticleController {
     private final CommentConverter commentConverter;
     private final CommentRepository commentRepository;
 
-    public ArticleController(ArticleService articleService, ArticleRepository articleRepository, ArticleConverter articleConverter, CommentConverter commentConverter, CommentRepository commentRepository) {
+    public ArticleApi(ArticleService articleService, ArticleRepository articleRepository, ArticleConverter articleConverter, CommentConverter commentConverter, CommentRepository commentRepository) {
         this.articleService = articleService;
         this.articleRepository = articleRepository;
         this.articleConverter = articleConverter;
@@ -63,7 +63,7 @@ public class ArticleController {
     @GetMapping(value = "/{articleId}/comments")
     @Cacheable(value = "articles", key = "#articleId")
     public CollectionModel<CommentDto> getArticleComments(@PathVariable Long articleId) {
-        Link link = linkTo(methodOn(ArticleController.class).getArticleComments(articleId)).withSelfRel();
+        Link link = linkTo(methodOn(ArticleApi.class).getArticleComments(articleId)).withSelfRel();
         return CollectionModel.of(commentRepository.findByArticleId(articleId).stream().map(commentConverter::toDto).collect(Collectors.toList()), link);
     }
 

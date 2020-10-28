@@ -1,6 +1,6 @@
 package com.app.cms.dto.converter;
 
-import com.app.cms.controller.ArticleController;
+import com.app.cms.api.ArticleApi;
 import com.app.cms.dto.ArticleDto;
 import com.app.cms.entity.Article;
 import com.app.cms.repository.CategoryRepository;
@@ -46,8 +46,8 @@ public class ArticleConverter implements ObjectConverter<Article, ArticleDto> {
         articleDto.setTitle(article.getTitle().getValue());
 
         articleDto.add(
-                linkTo(methodOn(ArticleController.class).getArticleById(article.getId())).withSelfRel(),
-                linkTo(methodOn(ArticleController.class).getArticles(0, 10, null, null)).withRel("articles"));
+                linkTo(methodOn(ArticleApi.class).getArticleById(article.getId())).withSelfRel(),
+                linkTo(methodOn(ArticleApi.class).getArticles(0, 10, null, null)).withRel("articles"));
 
         return articleDto;
     }

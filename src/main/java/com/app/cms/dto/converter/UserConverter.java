@@ -1,6 +1,6 @@
 package com.app.cms.dto.converter;
 
-import com.app.cms.controller.UserController;
+import com.app.cms.api.UserApi;
 import com.app.cms.dto.UserDto;
 import com.app.cms.entity.User;
 import com.app.cms.valueobject.user.Email;
@@ -36,8 +36,8 @@ public class UserConverter implements ObjectConverter<User, UserDto> {
         userDto.setEmail(user.getEmail().getValue());
 
         userDto.add(
-                linkTo(methodOn(UserController.class).getUserById(userDto.getId())).withSelfRel(),
-                linkTo(methodOn(UserController.class).getUsers(0, 10, null, null)).withRel("users"));
+                linkTo(methodOn(UserApi.class).getUserById(userDto.getId())).withSelfRel(),
+                linkTo(methodOn(UserApi.class).getUsers(0, 10, null, null)).withRel("users"));
 
         return userDto;
     }

@@ -1,6 +1,6 @@
 package com.app.cms.dto.converter;
 
-import com.app.cms.controller.CommentController;
+import com.app.cms.api.CommentApi;
 import com.app.cms.dto.CommentDto;
 import com.app.cms.entity.Comment;
 import com.app.cms.repository.ArticleRepository;
@@ -29,8 +29,8 @@ public class CommentConverter implements ObjectConverter<Comment, CommentDto> {
         commentDto.setCreationDate(comment.getCreationDate().getValue());
 
         commentDto.add(
-                linkTo(methodOn(CommentController.class).get(commentDto.getId())).withSelfRel(),
-                linkTo(methodOn(CommentController.class).getAll()).withRel("comments"));
+                linkTo(methodOn(CommentApi.class).get(commentDto.getId())).withSelfRel(),
+                linkTo(methodOn(CommentApi.class).getAll()).withRel("comments"));
 
         return commentDto;
     }

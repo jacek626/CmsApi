@@ -1,4 +1,4 @@
-package com.app.cms.controller;
+package com.app.cms.api;
 
 import com.app.cms.dto.CommentDto;
 import com.app.cms.dto.converter.CommentConverter;
@@ -20,13 +20,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/comments")
-public class CommentController {
+public class CommentApi {
 
     private final CommentRepository commentRepository;
     private final CommentService commentService;
     private final CommentConverter commentConverter;
 
-    public CommentController(CommentRepository commentRepository, CommentService commentService, CommentConverter commentConverter) {
+    public CommentApi(CommentRepository commentRepository, CommentService commentService, CommentConverter commentConverter) {
         this.commentRepository = commentRepository;
         this.commentService = commentService;
         this.commentConverter = commentConverter;
@@ -48,7 +48,7 @@ public class CommentController {
     @GetMapping
     @Cacheable(value = "comments")
     public CollectionModel<CommentDto> getAll() {
-        Link link = linkTo(methodOn(CommentController.class).getAll()).withSelfRel();
+        Link link = linkTo(methodOn(CommentApi.class).getAll()).withSelfRel();
         return CollectionModel.of(commentRepository.findAll().stream().map(commentConverter::toDto).collect(Collectors.toList()), link);
     }
 

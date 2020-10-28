@@ -1,6 +1,6 @@
 package com.app.cms.dto.converter;
 
-import com.app.cms.controller.CategoryController;
+import com.app.cms.api.CategoryApi;
 import com.app.cms.dto.CategoryDto;
 import com.app.cms.entity.Category;
 import com.app.cms.valueobject.category.Name;
@@ -25,8 +25,8 @@ public class CategoryConverter implements ObjectConverter<Category, CategoryDto>
         categoryDto.setName(category.getName().getValue());
 
         categoryDto.add(
-                linkTo(methodOn(CategoryController.class).getCategoryById(categoryDto.getId())).withSelfRel(),
-                linkTo(methodOn(CategoryController.class).getCategories(0, 10, null, null)).withRel("categories"));
+                linkTo(methodOn(CategoryApi.class).getCategoryById(categoryDto.getId())).withSelfRel(),
+                linkTo(methodOn(CategoryApi.class).getCategories(0, 10, null, null)).withRel("categories"));
 
         return categoryDto;
     }
