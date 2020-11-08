@@ -1,7 +1,7 @@
 package com.app.cms.entity;
 
 import com.app.cms.valueobject.article.Content;
-import com.app.cms.valueobject.article.Rating;
+import com.app.cms.valueobject.article.Ratings;
 import com.app.cms.valueobject.article.Title;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,7 +40,7 @@ public class Article implements Serializable {
 
     @NotNull
     @Embedded
-    private Rating rating;
+    private Ratings ratings;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

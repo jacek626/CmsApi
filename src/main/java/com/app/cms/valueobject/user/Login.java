@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Immutable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 
 @Immutable
@@ -28,4 +29,16 @@ public final class Login {
         return new Login(value);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Login login = (Login) o;
+        return Objects.equals(value, login.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 }

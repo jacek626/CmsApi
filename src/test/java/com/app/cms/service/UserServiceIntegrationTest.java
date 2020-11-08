@@ -8,7 +8,7 @@ import com.app.cms.error.type.ObjectHaveReferencedObjects;
 import com.app.cms.repository.UserRepository;
 import com.app.cms.utils.PasswordTestUtils;
 import com.app.cms.valueobject.article.Content;
-import com.app.cms.valueobject.article.Rating;
+import com.app.cms.valueobject.article.Ratings;
 import com.app.cms.valueobject.article.Title;
 import com.app.cms.valueobject.user.Email;
 import com.app.cms.valueobject.user.Login;
@@ -69,9 +69,10 @@ public class UserServiceIntegrationTest {
         userService.saveUserPartially(-1L, userValues);
 
         //then
-        assertThat(userRepository.getOne(-1L)).isNotNull();
-        assertThat(userRepository.getOne(-1L).getLogin()).isEqualTo(Login.of("login5747"));
-        assertThat(userRepository.getOne(-1L).getLogin()).isNotEqualTo(Login.of("lo3434747"));
+        var user = userRepository.getOne(-1L);
+        assertThat(user).isNotNull();
+        assertThat(user.getLogin()).isEqualTo(Login.of("login5747"));
+        assertThat(user.getLogin()).isNotEqualTo(Login.of("lo3434747"));
     }
 
     @Test
@@ -85,13 +86,12 @@ public class UserServiceIntegrationTest {
         userService.saveUserPartially(-1L, userValues);
 
         //then
-        assertThat(userRepository.getOne(-1L)).isNotNull();
-        assertThat(userRepository.getOne(-1L).getEmail()).isEqualTo(Email.of("email5653@gmail.com"));
-        assertThat(userRepository.getOne(-1L).getEmail()).isNotEqualTo(Email.of("em4343@gmail.com"));
+        var user = userRepository.getOne(-1L);
+        assertThat(user).isNotNull();
+        assertThat(user.getEmail()).isEqualTo(Email.of("email5653@gmail.com"));
+        assertThat(user.getEmail()).isNotEqualTo(Email.of("em4343@gmail.com"));
     }
 
-
-    @Test
     @Transactional
     public void shouldCreateUser() {
         //given
@@ -114,6 +114,7 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
+    @Transactional
     public void shouldDeleteUser() {
         //given
         var password = Password.of("Pass459230fk".toCharArray(), "Pass459230fk".toCharArray());
@@ -130,6 +131,7 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
+    @Transactional
     public void shouldNotDeleteUser_userHaveArticles() {
         //given
         var password = Password.of("Pass459230fk".toCharArray(), "Pass459230fk".toCharArray());
@@ -138,7 +140,7 @@ public class UserServiceIntegrationTest {
         var user = User.builder().login(login).email(email).password(password).build();
 
         var article = Article.builder().category(Category.builder().id(-1L).build()).user(user)
-                .rating(Rating.of(0F, 0)).title(Title.of("title")).content(Content.of("content")).build();
+                .rating(Ratings.of(0F, 0)).title(Title.of("title")).content(Content.of("content")).build();
 
         //when
         userService.save(user);

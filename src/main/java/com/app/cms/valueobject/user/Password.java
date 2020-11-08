@@ -70,7 +70,7 @@ public final class Password implements Serializable {
         SecureString securedPassword = new SecureString(password);
 
         // Hash the user password with a randomly generated salt
-        Hash hash = com.password4j.Password.hash(securedPassword).addRandomSalt().withPBKDF2();
+        Hash hash = com.password4j.Password.hash(securedPassword).withBCrypt();
 
         // Clear the password from memory
         securedPassword.clear();

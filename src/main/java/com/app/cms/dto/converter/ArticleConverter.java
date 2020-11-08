@@ -6,7 +6,7 @@ import com.app.cms.entity.Article;
 import com.app.cms.repository.CategoryRepository;
 import com.app.cms.repository.UserRepository;
 import com.app.cms.valueobject.article.Content;
-import com.app.cms.valueobject.article.Rating;
+import com.app.cms.valueobject.article.Ratings;
 import com.app.cms.valueobject.article.Title;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
@@ -41,8 +41,8 @@ public class ArticleConverter implements ObjectConverter<Article, ArticleDto> {
         articleDto.setId(article.getId());
         articleDto.setCreationDate(article.getCreationDate());
         articleDto.setContent(article.getContent().getValue());
-        articleDto.setRatingValue(article.getRating().getValue());
-        articleDto.setRatingCount(article.getRating().getCount());
+        articleDto.setRatingsNegative(article.getRatings().getNegative());
+        articleDto.setRatingsPositive(article.getRatings().getPositive());
         articleDto.setTitle(article.getTitle().getValue());
 
         articleDto.add(
@@ -69,17 +69,17 @@ public class ArticleConverter implements ObjectConverter<Article, ArticleDto> {
         if(articleDto.getCategoryId() != null || convertType == ConvertType.ALL_FIELDS_MUST_BE_SET)
             article.setCategory(categoryRepository.getOne(articleDto.getCategoryId()));
 
-        if(articleDto.getUserId() != null || convertType == ConvertType.ALL_FIELDS_MUST_BE_SET)
+        if (articleDto.getUserId() != null || convertType == ConvertType.ALL_FIELDS_MUST_BE_SET)
             article.setUser(userRepository.getOne(articleDto.getUserId()));
 
-        if(articleDto.getTitle() != null || convertType == ConvertType.ALL_FIELDS_MUST_BE_SET)
+        if (articleDto.getTitle() != null || convertType == ConvertType.ALL_FIELDS_MUST_BE_SET)
             article.setTitle(Title.of(articleDto.getTitle()));
 
-        if(articleDto.getContent() != null || convertType == ConvertType.ALL_FIELDS_MUST_BE_SET)
+        if (articleDto.getContent() != null || convertType == ConvertType.ALL_FIELDS_MUST_BE_SET)
             article.setContent(Content.of(articleDto.getContent()));
 
-        if(articleDto.getRatingValue() != null || articleDto.getRatingCount() != null || convertType == ConvertType.ALL_FIELDS_MUST_BE_SET)
-            article.setRating(Rating.of(articleDto.getRatingValue(), articleDto.getRatingCount()));
+        if (articleDto.getRatingsNegative() != null || articleDto.getRatingsPositive() != null || convertType == ConvertType.ALL_FIELDS_MUST_BE_SET)
+            article.setRatings(Ratings.of(articleDto.getRatingsPositive(), articleDto.getRatingsNegative()));
 
         return article;
     }

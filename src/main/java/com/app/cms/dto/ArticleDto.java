@@ -28,7 +28,7 @@ public class ArticleDto extends RepresentationModel<ArticleDto> implements Seria
 
     private Long categoryId;
 
-    private Float ratingValue;
+    private Integer ratingsNegative;
 
-    private Integer ratingCount;
+    private Integer ratingsPositive;
 }

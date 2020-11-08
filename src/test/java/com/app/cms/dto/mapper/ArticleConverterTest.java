@@ -8,7 +8,7 @@ import com.app.cms.entity.User;
 import com.app.cms.repository.CategoryRepository;
 import com.app.cms.repository.UserRepository;
 import com.app.cms.valueobject.article.Content;
-import com.app.cms.valueobject.article.Rating;
+import com.app.cms.valueobject.article.Ratings;
 import com.app.cms.valueobject.article.Title;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,10 +72,10 @@ public class ArticleConverterTest {
     }
 
     @Test
-    public void shouldThrowError_ratingCountIsNotSet() {
+    public void shouldThrowError_ratingsPositiveIsNotSet() {
         //given
         var articleDto = articleDtoWithAllFieldsSet();
-        articleDto.setRatingCount(null);
+        articleDto.setRatingsPositive(null);
 
         //when
         assertThatThrownBy(() ->
@@ -88,7 +88,8 @@ public class ArticleConverterTest {
         //given
         long categoryId = -20L;
         long userId = -30L;
-        float rateValue = 4.3F;
+        int positiveRatings = 5;
+        int negativeRatings = 2;
         var articleDto = articleDtoWithAllFieldsSet();
 
         given(categoryRepository.getOne(any())).willReturn(Category.builder().id(categoryId).build());
@@ -103,7 +104,8 @@ public class ArticleConverterTest {
         then(article.getTitle().getValue()).isEqualTo("title test");
         then(article.getContent().getValue()).isEqualTo("content test");
         then(article.getCreationDate()).isNotNull();
-        then(article.getRating().getValue()).isEqualTo(rateValue);
+        then(article.getRatings().getPositive()).isEqualTo(positiveRatings);
+        then(article.getRatings().getNegative()).isEqualTo(negativeRatings);
         then(article.getUser()).isNotNull();
         then(article.getUser().getId()).isNotNull();
         then(article.getCategory()).isNotNull();
@@ -118,14 +120,14 @@ public class ArticleConverterTest {
         long articleId = -1L;
         long userId = -5L;
         long categoryId = -10L;
-        float ratingValue = 3.2F;
-        int ratingCount = 6;
+        int positiveRatings = 7;
+        int negativeRatings = 9;
 
         var article = Article.builder()
                 .id(articleId)
                 .title(Title.of(title))
                 .content(Content.of(content))
-                .rating(Rating.of(ratingValue, ratingCount))
+                .ratings(Ratings.of(positiveRatings, negativeRatings))
                 .user(User.builder().id(userId).build())
                 .category(Category.builder().id(categoryId).build())
                 .creationDate(LocalDate.now())
@@ -149,8 +151,8 @@ public class ArticleConverterTest {
         //given
         Map<String, Object> changedValues = new HashMap<>();
         changedValues.put("title", "this is new title");
-        changedValues.put("ratingCount", 3);
-        changedValues.put("ratingValue", 4.5);
+        changedValues.put("ratingsCount", 3);
+        changedValues.put("ratingsValue", 4.5);
         changedValues.put("content", "updated content2");
         changedValues.put("userId", 16L);
         changedValues.put("categoryId", -21);
@@ -164,8 +166,8 @@ public class ArticleConverterTest {
 
         //then
         then(article.getTitle().getValue()).isEqualTo("this is new title");
-        then(article.getRating().getValue()).isEqualTo(4.5F);
-        then(article.getRating().getCount()).isEqualTo(3);
+        then(article.getRatings().getPositive()).isEqualTo(4.5F);
+        then(article.getRatings().getNegative()).isEqualTo(3);
         then(article.getContent().getValue()).isEqualTo("updated content2");
         then(article.getUser().getId()).isEqualTo(-16L);
         then(article.getCategory().getId()).isEqualTo(-21L);

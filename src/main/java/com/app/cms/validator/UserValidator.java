@@ -30,7 +30,7 @@ public class UserValidator implements ValidatorOnSave<User>, ValidatorOnDelete {
     @Override
     public void validateOnDelete(Long userId) {
         if (articleRepository.existsByUserId(userId)) {
-            throw new ObjectHaveReferencedObjects("User has articles, delete them first");
+            throw new ObjectHaveReferencedObjects("User has articles, delete them first, " + userId);
         }
     }
 
