@@ -11,19 +11,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User>, UserRepositoryMethods {
-    // @Query("select count(u)>0 from User u where u.login = :login")
     boolean existsByLogin(Login login);
-
-    // @Query("select count(u)>0 from User u where u.login = :login")
-    //  boolean existsByLogin(String login);
-
     User findByLoginValue(String login);
 
-    @Query("select count(u)>0 from User u where u.login = :login and u.id = :id")
+    @Query("select count(u) >0 from User u where u.login = :login and u.id = :id")
     boolean existsByLoginAndIdNot(Login login, Long id);
 
+    /*
     @Modifying
     @Query("update User u set u.password = :password where u.id = :id")
-    void updatePassword(@Param(value = "id") long id, @Param(value = "password") char[] password);
-
+    void updatePassword(@Param(value = "id") long id, @Param(value = "password") String password);
+*/
 }

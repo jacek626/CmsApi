@@ -80,7 +80,7 @@ public class ArticleConverterTest {
         //when
         assertThatThrownBy(() ->
                 articleConverter.toEntity(articleDto))
-                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("rating count");
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -88,10 +88,7 @@ public class ArticleConverterTest {
         //given
         long categoryId = -20L;
         long userId = -30L;
-        int positiveRatings = 5;
-        int negativeRatings = 2;
         var articleDto = articleDtoWithAllFieldsSet();
-
         given(categoryRepository.getOne(any())).willReturn(Category.builder().id(categoryId).build());
         given(userRepository.getOne(any())).willReturn(User.builder().id(userId).build());
 
@@ -104,8 +101,8 @@ public class ArticleConverterTest {
         then(article.getTitle().getValue()).isEqualTo("title test");
         then(article.getContent().getValue()).isEqualTo("content test");
         then(article.getCreationDate()).isNotNull();
-        then(article.getRatings().getPositive()).isEqualTo(positiveRatings);
-        then(article.getRatings().getNegative()).isEqualTo(negativeRatings);
+        then(article.getRatings().getPositive()).isEqualTo(articleDto.getRatingsPositive());
+        then(article.getRatings().getNegative()).isEqualTo(articleDto.getRatingsNegative());
         then(article.getUser()).isNotNull();
         then(article.getUser().getId()).isNotNull();
         then(article.getCategory()).isNotNull();
@@ -120,14 +117,14 @@ public class ArticleConverterTest {
         long articleId = -1L;
         long userId = -5L;
         long categoryId = -10L;
-        int positiveRatings = 7;
-        int negativeRatings = 9;
+        int ratingsPositive = 7;
+        int ratingsNegative = 9;
 
         var article = Article.builder()
                 .id(articleId)
                 .title(Title.of(title))
                 .content(Content.of(content))
-                .ratings(Ratings.of(positiveRatings, negativeRatings))
+                .ratings(Ratings.of(ratingsPositive, ratingsNegative))
                 .user(User.builder().id(userId).build())
                 .category(Category.builder().id(categoryId).build())
                 .creationDate(LocalDate.now())
@@ -142,7 +139,8 @@ public class ArticleConverterTest {
         then(articleDto.getContent()).isEqualTo(content);
         then(articleDto.getCategoryId()).isEqualTo(categoryId);
         then(articleDto.getUserId()).isEqualTo(userId);
-        then(articleDto.getRatingValue()).isEqualTo(ratingValue);
+        then(articleDto.getRatingsPositive()).isEqualTo(ratingsPositive);
+        then(articleDto.getRatingsNegative()).isEqualTo(ratingsNegative);
         then(articleDto.getCreationDate()).isNotNull();
     }
 
@@ -151,8 +149,8 @@ public class ArticleConverterTest {
         //given
         Map<String, Object> changedValues = new HashMap<>();
         changedValues.put("title", "this is new title");
-        changedValues.put("ratingsCount", 3);
-        changedValues.put("ratingsValue", 4.5);
+        changedValues.put("ratingsPositive", 3);
+        changedValues.put("ratingsNegative", 4);
         changedValues.put("content", "updated content2");
         changedValues.put("userId", 16L);
         changedValues.put("categoryId", -21);
@@ -166,8 +164,8 @@ public class ArticleConverterTest {
 
         //then
         then(article.getTitle().getValue()).isEqualTo("this is new title");
-        then(article.getRatings().getPositive()).isEqualTo(4.5F);
-        then(article.getRatings().getNegative()).isEqualTo(3);
+        then(article.getRatings().getPositive()).isEqualTo(3);
+        then(article.getRatings().getNegative()).isEqualTo(4);
         then(article.getContent().getValue()).isEqualTo("updated content2");
         then(article.getUser().getId()).isEqualTo(-16L);
         then(article.getCategory().getId()).isEqualTo(-21L);
@@ -188,7 +186,7 @@ public class ArticleConverterTest {
         then(article.getTitle().getValue()).isEqualTo("this is new title");
         then(article.getContent().getValue()).isEqualTo("updated content2");
         then(article.getId()).isNull();
-        then(article.getRating()).isNull();
+        then(article.getRatings()).isNull();
         then(article.getUser()).isNull();
     }
 
@@ -196,15 +194,15 @@ public class ArticleConverterTest {
     public void shouldConvertMapToEntity_WithRatingOnly() {
         //given
         Map<String, Object> changedValues = new HashMap<>();
-        changedValues.put("ratingCount", 3);
-        changedValues.put("ratingValue", 4.5);
+        changedValues.put("ratingsPositive", 3);
+        changedValues.put("ratingsNegative", 4);
 
         //when
         Article article = articleConverter.toEntity(changedValues);
 
         //then
-        then(article.getRating().getValue()).isEqualTo(4.5F);
-        then(article.getRating().getCount()).isEqualTo(3);
+        then(article.getRatings().getPositive()).isEqualTo(3);
+        then(article.getRatings().getNegative()).isEqualTo(4);
         then(article.getTitle()).isNull();
         then(article.getContent()).isNull();
         then(article.getId()).isNull();
@@ -220,7 +218,7 @@ public class ArticleConverterTest {
         Article article = articleConverter.toEntity(changedValues);
 
         //then
-        then(article.getRating()).isNull();
+        then(article.getRatings()).isNull();
         then(article.getTitle()).isNull();
         then(article.getContent()).isNull();
         then(article.getId()).isNull();
@@ -235,8 +233,8 @@ public class ArticleConverterTest {
                 .categoryId(-20L)
                 .userId(-30L)
                 .creationDate(LocalDate.now())
-                .ratingValue(4.3F)
-                .ratingCount(5)
+                .ratingsNegative(4)
+                .ratingsPositive(3)
                 .build();
     }
 }

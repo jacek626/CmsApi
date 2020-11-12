@@ -140,12 +140,13 @@ public class UserServiceIntegrationTest {
         var user = User.builder().login(login).email(email).password(password).build();
 
         var article = Article.builder().category(Category.builder().id(-1L).build()).user(user)
-                .rating(Ratings.of(0F, 0)).title(Title.of("title")).content(Content.of("content")).build();
+                .ratings(Ratings.of(0, 0)).title(Title.of("title")).content(Content.of("content")).build();
 
         //when
         userService.save(user);
         articleService.save(article);
 
+        //then
         assertThatThrownBy(() -> userService.delete(user.getId())).isInstanceOf(ObjectHaveReferencedObjects.class);
     }
 }

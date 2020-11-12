@@ -61,16 +61,16 @@ public class ArticleRepositoryTest {
     public void shouldUpdatePartially_ratingValueAndRatingCount() {
         //given
         Map<String, Object> changedValues = new HashMap<>();
-        changedValues.put("ratingValue", 4.7F);
-        changedValues.put("ratingCount", 7);
+        changedValues.put("ratingsPositive", 4);
+        changedValues.put("ratingsNegative", 7);
 
         //when
         articleRepository.updatePartially(-1L, changedValues);
 
         //then
         var savedArticle = articleRepository.getOne(-1L);
-        then(savedArticle.getRating().getValue()).isEqualTo(4.7F);
-        then(savedArticle.getRating().getCount()).isEqualTo(7);
+        then(savedArticle.getRatings().getPositive()).isEqualTo(4);
+        then(savedArticle.getRatings().getNegative()).isEqualTo(7);
     }
 
     @Test
