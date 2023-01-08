@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>user-service</artifactId>
+        <groupId>com.cms</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>user-container</artifactId>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core-jakarta</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.1.6.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cms</groupId>
+            <artifactId>user-application</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cms</groupId>
+            <artifactId>user-domain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cms</groupId>
+            <artifactId>user-infrastructure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cms</groupId>
+            <artifactId>kafka-producer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cms</groupId>
+            <artifactId>kafka-consumer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cms</groupId>
+            <artifactId>kafka-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-maven-plugin</artifactId>
+                <version>1.12.10</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>transform</goal> <!-- Enable the source code transformation -->
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency> <!-- Apply jMolecules transformations -->
+                        <groupId>org.jmolecules.integrations</groupId>
+                        <artifactId>jmolecules-bytebuddy</artifactId>
+                        <version>0.10.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

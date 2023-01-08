@@ -1,0 +1,18 @@
+{
+  "type": "record",
+  "name": "UserEventAvro",
+  "namespace": "com.cms.avro.model",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "firstName",
+      "type": "string"
+    },
+    {
+      "name": "lastName",
+      "type": "string"
+    }]
+}
